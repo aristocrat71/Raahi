@@ -1,13 +1,26 @@
 :root {
+  /* Light Theme */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1d1d1d;
+  --accent: #35c87a;
+  --secondary-bg: #f9f9f9;
+  --text-color: #1d1d1d;
+  --card-bg: #f9f9f9;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --nav-bg: rgba(255, 255, 255, 0.8);
+  --button-text: #ffffff;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme="dark"] {
+  --background: #181818;
+  --foreground: #e0e0e0;
+  --accent: #35c87a;
+  --secondary-bg: #23272a;
+  --text-color: #e0e0e0;
+  --card-bg: #23272a;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --nav-bg: rgba(24, 24, 24, 0.8);
+  --button-text: #1d1d1d;
 }
 
 html,
@@ -19,9 +32,10 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Montserrat, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 * {
@@ -39,4 +53,34 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 1rem;
+}
+
+button, .button {
+  background-color: var(--accent);
+  color: var(--button-text);
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover, .button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+section {
+  padding: 4rem 0;
 }

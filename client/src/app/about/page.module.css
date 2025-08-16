@@ -1,0 +1,93 @@
+.container {
+  padding-top: 80px;
+}
+
+.hero {
+  padding: 6rem 1.5rem 4rem;
+  text-align: center;
+  background-color: var(--secondary-bg);
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto;
+  color: var(--foreground);
+  opacity: 0.8;
+}
+
+.content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.textSection {
+  margin-bottom: 3rem;
+}
+
+.textSection h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--foreground);
+}
+
+.textSection p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+.featureList {
+  padding-left: 1.5rem;
+  margin-top: 1rem;
+}
+
+.featureList li {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.ctaSection {
+  padding: 4rem 1.5rem;
+  background-color: var(--background);
+  text-align: center;
+}
+
+.ctaBox {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 3rem;
+  background-color: var(--accent);
+  border-radius: 10px;
+  color: var(--button-text);
+}
+
+.ctaTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.ctaSubtitle {
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.25rem;
+  }
+  
+  .content {
+    padding: 3rem 1.5rem;
+  }
+}

@@ -1,0 +1,115 @@
+.footer {
+  background-color: var(--secondary-bg);
+  padding: 4rem 0 2rem;
+  color: var(--foreground);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.brandSection {
+  flex: 1;
+  min-width: 250px;
+}
+
+.logo {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.tagline {
+  color: var(--foreground);
+  opacity: 0.8;
+  max-width: 300px;
+}
+
+.linksSection {
+  display: flex;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.linkGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 140px;
+}
+
+.linkGroup h4 {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--accent);
+}
+
+.linkGroup a {
+  color: var(--foreground);
+  opacity: 0.8;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.linkGroup a:hover {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.bottom p {
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.socialLinks a {
+  color: var(--foreground);
+  opacity: 0.7;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.socialLinks a:hover {
+  opacity: 1;
+  color: var(--accent);
+}
+
+@media (max-width: 768px) {
+  .top {
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .bottom {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+}
