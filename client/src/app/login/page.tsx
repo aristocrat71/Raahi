@@ -1,12 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 import Button from "@/components/ui/Button";
 import Link from "next/link";
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  
+  useEffect(() => {
+    const error = searchParams.get("error");
+    if (error === "auth_failed") {
+      setErrorMessage("Login was cancelled or failed. Please try again.");
+    }
+  }, [searchParams]);
 
   return (
     <div className={styles.container}>
@@ -18,6 +28,11 @@ export default function Login() {
               ? "Welcome back! Please log in to continue."
               : "Create an account to get started."}
           </p>
+          {errorMessage && (
+            <div className={styles.errorMessage}>
+              {errorMessage}
+            </div>
+          )}
         </div>
 
         <div className={styles.tabs}>
@@ -36,7 +51,12 @@ export default function Login() {
         </div>
 
         <div className={styles.oauthButtons}>
-          <button className={styles.googleButton}>
+          <button 
+            className={styles.googleButton}
+            onClick={() => {
+              window.location.href = 'http://localhost:5000/api/auth/google';
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18"

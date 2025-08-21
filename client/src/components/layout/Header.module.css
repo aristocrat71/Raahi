@@ -58,6 +58,12 @@
   background-color: var(--accent);
 }
 
+.navButton {
+  padding: 0.4rem 1rem;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
 .rightSection {
   display: flex;
   align-items: center;

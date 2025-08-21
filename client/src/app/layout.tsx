@@ -5,6 +5,7 @@ import ThemeProvider from "@/components/layout/ThemeProvider";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { updateThemeScript } from "@/utils/theme-script";
+import { AuthProvider } from "@/context/auth/AuthContext";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -28,11 +29,13 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: updateThemeScript }} />
       </head>
       <body className={montserrat.className}>
-        <ThemeProvider>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

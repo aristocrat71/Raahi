@@ -3,10 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTheme } from '@/context/ThemeContext';
+import { useAuth } from '@/context/auth/AuthContext';
 import styles from './Header.module.css';
+import Button from '@/components/ui/Button';
 
 const Header: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const { user, loading, login, logout } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -29,7 +32,24 @@ const Header: React.FC = () => {
         <div className={`${styles.navLinks} ${isMobileMenuOpen ? styles.open : ''}`}>
           <Link href="/" className={styles.navLink}>Home</Link>
           <Link href="/about" className={styles.navLink}>About</Link>
-          <Link href="/login" className={styles.navLink}>Login/Signup</Link>
+          {!loading && (
+            <>
+              {user ? (
+                <>
+                  <Link href="/dashboard" className={styles.navLink}>Dashboard</Link>
+                  <Button 
+                    onClick={logout} 
+                    variant="secondary"
+                    className={styles.navButton}
+                  >
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <Link href="/login" className={styles.navLink}>Login</Link>
+              )}
+            </>
+          )}
         </div>
 
         <div className={styles.rightSection}>
