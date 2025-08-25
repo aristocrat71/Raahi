@@ -37,6 +37,7 @@ const Header: React.FC = () => {
               {user ? (
                 <>
                   <Link href="/dashboard" className={styles.navLink}>Dashboard</Link>
+                  <Link href="/trips" className={styles.navLink}>My Trips</Link>
                   <Button 
                     onClick={logout} 
                     variant="secondary"

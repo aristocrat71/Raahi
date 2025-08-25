@@ -1,18 +1,20 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const User = require('../models/User');
+const { supabaseAdmin } = require('./supabase');
 require('dotenv').config();
-
-// In a real application, you would use a database
-// For now, we'll use an in-memory users array
-const users = [];
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  const user = users.find(user => user.id === id);
-  done(null, user);
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.getById(id);
+    done(null, user);
+  } catch (error) {
+    done(error, null);
+  }
 });
 
 passport.use(
@@ -23,26 +25,56 @@ passport.use(
       callbackURL: '/api/auth/google/callback',
       scope: ['profile', 'email']
     },
-    (accessToken, refreshToken, profile, done) => {
-      // Check if user already exists
-      let user = users.find(user => user.googleId === profile.id);
-      
-      if (user) {
-        return done(null, user);
-      } else {
-        // Create a new user
-        user = {
-          id: Date.now().toString(),
-          googleId: profile.id,
-          name: profile.displayName,
-          email: profile.emails[0].value,
-          avatar: profile.photos[0].value
-        };
-        users.push(user);
-        return done(null, user);
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        // Check if user exists in Supabase
+        const { data: existingUser, error } = await supabaseAdmin
+          .from('users')
+          .select('*')
+          .eq('email', profile.emails[0].value)
+          .single();
+        
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error checking for existing user:', error);
+          return done(error, null);
+        }
+        
+        if (existingUser) {
+          // User exists, return it
+          return done(null, existingUser);
+        } else {
+          // Create a new user in the auth schema with the Google OAuth provider
+          const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
+            email: profile.emails[0].value,
+            email_confirm: true,
+            user_metadata: {
+              full_name: profile.displayName,
+              avatar_url: profile.photos[0].value,
+              provider: 'google'
+            }
+          });
+          
+          if (authError) {
+            console.error('Error creating auth user:', authError);
+            return done(authError, null);
+          }
+          
+          // Create the user in our application database
+          const newUser = {
+            id: authUser.user.id,
+            name: profile.displayName,
+            email: profile.emails[0].value,
+            avatar: profile.photos[0].value
+          };
+          
+          // Use our User model to create the user
+          const user = await User.createOrUpdate(newUser);
+          return done(null, user);
+        }
+      } catch (error) {
+        console.error('Error in Google strategy:', error);
+        return done(error, null);
       }
     }
   )
 );
-
-module.exports = { users };  // Export users for testing purposes

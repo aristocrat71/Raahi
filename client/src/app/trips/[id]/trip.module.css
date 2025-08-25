@@ -1,0 +1,249 @@
+.container {
+  padding: 2rem 1.5rem;
+  padding-top: 120px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+  gap: 1rem;
+}
+
+.loadingSpinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--accent);
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tripHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 2rem;
+}
+
+.tripHeaderInfo h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.tripDates {
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin: 0 0 0.5rem 0;
+}
+
+.tripLocation {
+  font-size: 1.1rem;
+  color: var(--foreground);
+  opacity: 0.8;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tripActions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.tripDescription {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.tripDescription p {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--foreground);
+  white-space: pre-line;
+}
+
+.itemsSection {
+  margin-bottom: 3rem;
+}
+
+.itemsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.itemsHeader h2 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.emptyState {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.emptyState p {
+  margin: 0 0 1rem 0;
+  color: var(--foreground);
+  opacity: 0.8;
+}
+
+.itemsGroup {
+  margin-bottom: 2.5rem;
+}
+
+.itemsGroup h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.itemsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.itemCard {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.itemCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.itemHeader {
+  margin-bottom: 0.75rem;
+}
+
+.itemHeader h4 {
+  font-size: 1.2rem;
+  margin: 0 0 0.3rem 0;
+  color: var(--foreground);
+}
+
+.itemLocation {
+  font-size: 0.95rem;
+  color: var(--foreground);
+  opacity: 0.8;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.itemDescription {
+  font-size: 0.95rem;
+  color: var(--foreground);
+  margin: 0.5rem 0 1rem 0;
+  line-height: 1.5;
+}
+
+.itemDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--foreground);
+  opacity: 0.8;
+}
+
+.itemTime,
+.itemCost,
+.itemReservation {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.qrCodeSection {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.qrCodeSection h2 {
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.qrCodeSection p {
+  margin: 0 0 1.5rem 0;
+  color: var(--foreground);
+  opacity: 0.8;
+}
+
+.qrCodePlaceholder {
+  width: 200px;
+  height: 200px;
+  background-color: var(--background);
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 0.9rem;
+  color: var(--foreground);
+  opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+  .tripHeader {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .tripActions {
+    width: 100%;
+  }
+  
+  .tripActions button {
+    flex: 1;
+  }
+  
+  .itemsList {
+    grid-template-columns: 1fr;
+  }
+}

@@ -10,6 +10,7 @@ interface ButtonProps {
   onClick?: () => void;
   className?: string;
   type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -20,6 +21,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   className,
   type = 'button',
+  disabled = false,
 }) => {
   const buttonClasses = `${styles.button} ${styles[variant]} ${styles[size]} ${className || ''}`;
 
@@ -36,6 +38,7 @@ const Button: React.FC<ButtonProps> = ({
       type={type} 
       className={buttonClasses} 
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </button>
@@ -43,3 +46,4 @@ const Button: React.FC<ButtonProps> = ({
 };
 
 export default Button;
+export type { ButtonProps };
