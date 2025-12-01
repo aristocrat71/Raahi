@@ -9,9 +9,9 @@
   - [x] Transport
   - [ ] Finalize data model
 - [ ] Tech Stack Setup
-  - [ ] Frontend (React + Vite)
-  - [ ] Backend (Python + FastAPI)
-  - [ ] Database selection
+  - [x] Frontend (React + Vite)
+  - [x] Backend (Python + FastAPI)
+  - [x] Database selection - Postgre with Supabase.
 - [ ] Frontend Development
   - [ ] Login/Authentication UI
   - [ ] Travel Card Creation Form

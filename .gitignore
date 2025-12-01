@@ -1,1 +1,42 @@
+# Copilot Rules
+.copilot-rules
+
+# Environment variables
 .env
+.env.local
+.env.*.local
+
+# Database Schema
+schema.sql
+
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Python
+backend/venv/
+backend/env/
+backend/__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# OS
+.DS_Store
+Thumbs.db
