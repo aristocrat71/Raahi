@@ -46,9 +46,11 @@ export default function Login() {
     const response = await login(formData);
 
     if (response.success) {
+      localStorage.setItem('token', response.token!);
       localStorage.setItem('user_id', response.user_id!);
       localStorage.setItem('email', response.email!);
-      navigate('/');
+      localStorage.setItem('full_name', response.full_name!);
+      navigate('/dashboard');
     } else {
       setError(response.message);
     }

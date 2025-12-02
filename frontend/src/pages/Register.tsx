@@ -32,6 +32,10 @@ export default function Register() {
     const response = await register(formData);
 
     if (response.success) {
+      localStorage.setItem('token', response.token!);
+      localStorage.setItem('user_id', response.user_id!);
+      localStorage.setItem('email', response.email!);
+      localStorage.setItem('full_name', response.full_name!);
       localStorage.setItem('registration_success', 'true');
       navigate('/login');
     } else {
