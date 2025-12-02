@@ -1,0 +1,112 @@
+.travel-card {
+  padding: 26px;
+  border: var(--border-width) solid var(--dark-blue);
+  background-color: var(--white);
+  border-radius: 0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 64, 128, 0.1);
+}
+
+.travel-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 64, 128, 0.2);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.card-destination {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--dark-blue);
+  margin: 0;
+  flex: 1;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 0;
+  text-transform: capitalize;
+  white-space: nowrap;
+  border: var(--border-width) solid;
+}
+
+.status-planning {
+  background-color: var(--sky-blue);
+  color: var(--dark-blue);
+  border-color: var(--dark-blue);
+}
+
+.status-booked {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #155724;
+}
+
+.status-completed {
+  background-color: #cce5ff;
+  color: #004080;
+  border-color: #004080;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-dates {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid #e0e0e0;
+}
+
+.date-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.card-duration {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid #e0e0e0;
+}
+
+.date-label,
+.duration-label {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  font-weight: 500;
+}
+
+.date-value,
+.duration-value {
+  font-size: 14px;
+  color: var(--dark-blue);
+  margin: 0;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .travel-card {
+    padding: 16px;
+  }
+
+  .card-destination {
+    font-size: 18px;
+  }
+}
