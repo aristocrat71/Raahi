@@ -101,6 +101,62 @@
   font-weight: 600;
 }
 
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.card-btn {
+  flex: 1;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border: var(--border-width) solid;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.edit-btn {
+  background-color: var(--dark-blue);
+  color: var(--white);
+  border-color: var(--dark-blue);
+}
+
+.edit-btn:hover {
+  background-color: var(--sky-blue);
+  color: var(--dark-blue);
+  box-shadow: 0 2px 8px rgba(0, 64, 128, 0.2);
+  transform: translateY(-1px);
+}
+
+.edit-btn:active {
+  transform: translateY(0);
+}
+
+.remove-btn {
+  background-color: #ff6b6b;
+  color: var(--white);
+  border-color: #ff6b6b;
+}
+
+.remove-btn:hover {
+  background-color: #ff5252;
+  border-color: #ff5252;
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+  transform: translateY(-1px);
+}
+
+.remove-btn:active {
+  transform: translateY(0);
+}
+
 @media (max-width: 768px) {
   .travel-card {
     padding: 16px;

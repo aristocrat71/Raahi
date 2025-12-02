@@ -59,6 +59,11 @@ export default function TravelCard({
           <p className="duration-value">{duration_days} days</p>
         </div>
       </div>
+
+      <div className="card-actions">
+        <button className="card-btn edit-btn">Edit</button>
+        <button className="card-btn remove-btn">Remove</button>
+      </div>
     </div>
   );
 }
