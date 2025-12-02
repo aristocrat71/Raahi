@@ -12,7 +12,7 @@ from db.travel_card_service import (
     get_travel_card_by_id,
     get_hotels_by_card,
     get_transports_by_card,
-    update_travel_card,
+    update_travel_card_with_nested,
     delete_travel_card,
 )
 from routes.dependencies import get_current_user
@@ -144,24 +144,41 @@ def update_travel_card_endpoint(
             detail="Travel card not found"
         )
     
-    # Prepare update dict (only non-null values)
-    updates = {k: v for k, v in request.dict().items() if v is not None}
-    
-    if not updates:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No fields to update"
-        )
-    
     # Validate dates if both provided
-    if "start_date" in updates and "end_date" in updates:
-        if updates["end_date"] < updates["start_date"]:
+    start_date = request.start_date or existing_card["start_date"]
+    end_date = request.end_date or existing_card["end_date"]
+    
+    if request.start_date and request.end_date:
+        if request.end_date < request.start_date:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="End date must be after start date"
             )
+    elif request.start_date and end_date < request.start_date:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="End date must be after start date"
+        )
+    elif request.end_date and request.end_date < start_date:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="End date must be after start date"
+        )
     
-    updated_card = update_travel_card(card_id, user_id, updates)
+    # Convert hotel/transport requests to dicts for service
+    hotels = [h.dict() for h in request.hotels] if request.hotels else None
+    transports = [t.dict() for t in request.transports] if request.transports else None
+    
+    updated_card = update_travel_card_with_nested(
+        card_id,
+        user_id,
+        destination=request.destination,
+        start_date=request.start_date,
+        end_date=request.end_date,
+        status=request.status,
+        hotels=hotels,
+        transports=transports
+    )
     
     if not updated_card:
         raise HTTPException(
@@ -169,8 +186,8 @@ def update_travel_card_endpoint(
             detail="Failed to update travel card"
         )
     
-    hotels = get_hotels_by_card(card_id)
-    transports = get_transports_by_card(card_id)
+    hotels_data = get_hotels_by_card(card_id)
+    transports_data = get_transports_by_card(card_id)
     
     return TravelCardResponse(
         id=updated_card["id"],
@@ -180,8 +197,8 @@ def update_travel_card_endpoint(
         end_date=updated_card["end_date"],
         duration_days=updated_card["duration_days"],
         status=updated_card["status"],
-        hotels=hotels,
-        transports=transports,
+        hotels=hotels_data,
+        transports=transports_data,
     )
 
 @router.delete("/travel-cards/{card_id}")

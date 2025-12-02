@@ -67,3 +67,5 @@ class TravelCardUpdateRequest(BaseModel):
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     status: Optional[str] = None
+    hotels: Optional[List[HotelRequest]] = None
+    transports: Optional[List[TransportRequest]] = None
