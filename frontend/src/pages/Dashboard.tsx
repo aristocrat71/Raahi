@@ -14,26 +14,6 @@ interface TravelCard {
   status: string;
 }
 
-interface Hotel {
-  name: string;
-  location: string;
-  check_in_date: string;
-  check_out_date: string;
-  room_type: string;
-  price_per_night: string;
-  total_cost: string;
-}
-
-interface Transport {
-  type: string;
-  origin: string;
-  destination: string;
-  departure_time: string;
-  arrival_time: string;
-  booking_reference: string;
-  cost: string;
-}
-
 export default function Dashboard() {
   const [firstName, setFirstName] = useState('');
   const [travelCards, setTravelCards] = useState<TravelCard[]>([]);
@@ -110,8 +90,24 @@ export default function Dashboard() {
     start_date: string;
     end_date: string;
     status: string;
-    hotels: Hotel[];
-    transports: Transport[];
+    hotels: {
+      hotel_name: string | null;
+      location: string | null;
+      check_in_date: string | null;
+      check_out_date: string | null;
+      room_type: string | null;
+      price_per_night: number | null;
+      total_cost: number | null;
+    }[];
+    transports: {
+      transport_type: string | null;
+      origin: string | null;
+      destination: string | null;
+      departure_time: string | null;
+      arrival_time: string | null;
+      booking_reference: string | null;
+      cost: number | null;
+    }[];
   }) => {
     const token = localStorage.getItem('token');
 
@@ -122,7 +118,7 @@ export default function Dashboard() {
     }
 
     try {
-      // Build request payload - only include non-empty arrays
+      // Build request payload
       const payload: any = {
         destination: data.destination,
         start_date: data.start_date,
@@ -132,28 +128,12 @@ export default function Dashboard() {
 
       // Only add hotels if there are any
       if (data.hotels.length > 0) {
-        payload.hotels = data.hotels.map((h) => ({
-          name: h.name || null,
-          location: h.location || null,
-          check_in_date: h.check_in_date || null,
-          check_out_date: h.check_out_date || null,
-          room_type: h.room_type || null,
-          price_per_night: h.price_per_night ? parseFloat(h.price_per_night) : null,
-          total_cost: h.total_cost ? parseFloat(h.total_cost) : null,
-        }));
+        payload.hotels = data.hotels;
       }
 
       // Only add transports if there are any
       if (data.transports.length > 0) {
-        payload.transports = data.transports.map((t) => ({
-          type: t.type || null,
-          origin: t.origin || null,
-          destination: t.destination || null,
-          departure_time: t.departure_time || null,
-          arrival_time: t.arrival_time || null,
-          booking_reference: t.booking_reference || null,
-          cost: t.cost ? parseFloat(t.cost) : null,
-        }));
+        payload.transports = data.transports;
       }
 
       const response = await fetch('http://localhost:8000/api/travel-cards', {

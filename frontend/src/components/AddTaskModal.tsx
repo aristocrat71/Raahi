@@ -31,8 +31,24 @@ interface AddTaskModalProps {
     start_date: string;
     end_date: string;
     status: string;
-    hotels: Hotel[];
-    transports: Transport[];
+    hotels: {
+      hotel_name: string | null;
+      location: string | null;
+      check_in_date: string | null;
+      check_out_date: string | null;
+      room_type: string | null;
+      price_per_night: number | null;
+      total_cost: number | null;
+    }[];
+    transports: {
+      transport_type: string | null;
+      origin: string | null;
+      destination: string | null;
+      departure_time: string | null;
+      arrival_time: string | null;
+      booking_reference: string | null;
+      cost: number | null;
+    }[];
   }) => Promise<void>;
   onStatusChange: (status: string) => void;
   defaultStatus: string;
@@ -148,6 +164,35 @@ export default function AddTaskModal({
     return destination.trim() && startDate && endDate;
   };
 
+  // Validation errors
+  const getErrors = () => {
+    const errors: {
+      destination?: string;
+      startDate?: string;
+      endDate?: string;
+    } = {};
+
+    if (!destination.trim()) {
+      errors.destination = 'Destination is required';
+    }
+
+    if (!startDate) {
+      errors.startDate = 'Start date is required';
+    }
+
+    if (!endDate) {
+      errors.endDate = 'End date is required';
+    }
+
+    if (startDate && endDate && new Date(endDate) < new Date(startDate)) {
+      errors.endDate = 'End date must be after or equal to start date';
+    }
+
+    return errors;
+  };
+
+  const errors = getErrors();
+
   const handleNext = () => {
     if (activeTab === 'basic' && validateBasicInfo()) {
       setActiveTab('hotels');
@@ -191,7 +236,15 @@ export default function AddTaskModal({
           h.room_type.trim() ||
           h.price_per_night.trim() ||
           h.total_cost.trim()
-      );
+      ).map((h) => ({
+        hotel_name: h.name.trim() || null,
+        location: h.location.trim() || null,
+        check_in_date: h.check_in_date || null,
+        check_out_date: h.check_out_date || null,
+        room_type: h.room_type.trim() || null,
+        price_per_night: h.price_per_night.trim() ? parseFloat(h.price_per_night) : null,
+        total_cost: h.total_cost.trim() ? parseFloat(h.total_cost) : null,
+      }));
 
       // Filter out empty transport entries
       const filledTransports = transports.filter(
@@ -203,7 +256,15 @@ export default function AddTaskModal({
           t.arrival_time ||
           t.booking_reference.trim() ||
           t.cost.trim()
-      );
+      ).map((t) => ({
+        transport_type: t.type.trim() || null,
+        origin: t.origin.trim() || null,
+        destination: t.destination.trim() || null,
+        departure_time: t.departure_time || null,
+        arrival_time: t.arrival_time || null,
+        booking_reference: t.booking_reference.trim() || null,
+        cost: t.cost.trim() ? parseFloat(t.cost) : null,
+      }));
 
       await onAddTrip({
         destination,
@@ -298,11 +359,14 @@ export default function AddTaskModal({
                 </label>
                 <input
                   type="text"
-                  className="form-input"
+                  className={`form-input ${errors.destination ? 'input-error' : ''}`}
                   placeholder="Enter destination"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
                 />
+                {errors.destination && (
+                  <span className="error-message">{errors.destination}</span>
+                )}
               </div>
 
               <div className="form-row">
@@ -312,10 +376,13 @@ export default function AddTaskModal({
                   </label>
                   <input
                     type="date"
-                    className="form-input"
+                    className={`form-input ${errors.startDate ? 'input-error' : ''}`}
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                   />
+                  {errors.startDate && (
+                    <span className="error-message">{errors.startDate}</span>
+                  )}
                 </div>
 
                 <div className="form-group">
@@ -324,11 +391,14 @@ export default function AddTaskModal({
                   </label>
                   <input
                     type="date"
-                    className="form-input"
+                    className={`form-input ${errors.endDate ? 'input-error' : ''}`}
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                     min={startDate}
                   />
+                  {errors.endDate && (
+                    <span className="error-message">{errors.endDate}</span>
+                  )}
                 </div>
               </div>
 
@@ -640,7 +710,7 @@ export default function AddTaskModal({
               <button
                 className="btn-primary"
                 onClick={handleNext}
-                disabled={!validateBasicInfo()}
+                disabled={!validateBasicInfo() || Object.keys(errors).length > 0}
               >
                 Next
               </button>

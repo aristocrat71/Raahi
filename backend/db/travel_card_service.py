@@ -30,10 +30,10 @@ def create_travel_card_with_nested(user_id: str, destination: str, start_date: d
             for hotel in hotels:
                 supabase.table("hotels").insert({
                     "travel_card_id": travel_card_id,
-                    "hotel_name": hotel["hotel_name"],
-                    "location": hotel["location"],
-                    "check_in_date": hotel["check_in_date"].isoformat(),
-                    "check_out_date": hotel["check_out_date"].isoformat(),
+                    "hotel_name": hotel.get("hotel_name"),
+                    "location": hotel.get("location"),
+                    "check_in_date": hotel.get("check_in_date").isoformat() if hotel.get("check_in_date") else None,
+                    "check_out_date": hotel.get("check_out_date").isoformat() if hotel.get("check_out_date") else None,
                     "room_type": hotel.get("room_type"),
                     "price_per_night": hotel.get("price_per_night"),
                     "total_cost": hotel.get("total_cost"),
@@ -44,11 +44,11 @@ def create_travel_card_with_nested(user_id: str, destination: str, start_date: d
             for transport in transports:
                 supabase.table("transports").insert({
                     "travel_card_id": travel_card_id,
-                    "transport_type": transport["transport_type"],
-                    "origin": transport["origin"],
-                    "destination": transport["destination"],
-                    "departure_time": transport["departure_time"],
-                    "arrival_time": transport["arrival_time"],
+                    "transport_type": transport.get("transport_type"),
+                    "origin": transport.get("origin"),
+                    "destination": transport.get("destination"),
+                    "departure_time": transport.get("departure_time"),
+                    "arrival_time": transport.get("arrival_time"),
                     "booking_reference": transport.get("booking_reference"),
                     "cost": transport.get("cost"),
                     "is_departure": transport.get("is_departure", False),
@@ -160,10 +160,10 @@ def update_travel_card_with_nested(card_id: str, user_id: str, destination: str 
                     # Create new hotel
                     supabase.table("hotels").insert({
                         "travel_card_id": card_id,
-                        "hotel_name": hotel["hotel_name"],
-                        "location": hotel["location"],
-                        "check_in_date": hotel["check_in_date"].isoformat(),
-                        "check_out_date": hotel["check_out_date"].isoformat(),
+                        "hotel_name": hotel.get("hotel_name"),
+                        "location": hotel.get("location"),
+                        "check_in_date": hotel.get("check_in_date").isoformat() if hotel.get("check_in_date") else None,
+                        "check_out_date": hotel.get("check_out_date").isoformat() if hotel.get("check_out_date") else None,
                         "room_type": hotel.get("room_type"),
                         "price_per_night": hotel.get("price_per_night"),
                         "total_cost": hotel.get("total_cost"),
@@ -193,11 +193,11 @@ def update_travel_card_with_nested(card_id: str, user_id: str, destination: str 
                     # Create new transport
                     supabase.table("transports").insert({
                         "travel_card_id": card_id,
-                        "transport_type": transport["transport_type"],
-                        "origin": transport["origin"],
-                        "destination": transport["destination"],
-                        "departure_time": transport["departure_time"],
-                        "arrival_time": transport["arrival_time"],
+                        "transport_type": transport.get("transport_type"),
+                        "origin": transport.get("origin"),
+                        "destination": transport.get("destination"),
+                        "departure_time": transport.get("departure_time"),
+                        "arrival_time": transport.get("arrival_time"),
                         "booking_reference": transport.get("booking_reference"),
                         "cost": transport.get("cost"),
                         "is_departure": transport.get("is_departure", False),

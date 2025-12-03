@@ -3,20 +3,20 @@ from typing import Optional, List
 from datetime import date
 
 class HotelRequest(BaseModel):
-    hotel_name: str
-    location: str
-    check_in_date: date
-    check_out_date: date
+    hotel_name: Optional[str] = None
+    location: Optional[str] = None
+    check_in_date: Optional[date] = None
+    check_out_date: Optional[date] = None
     room_type: Optional[str] = None
     price_per_night: Optional[float] = None
     total_cost: Optional[float] = None
 
 class TransportRequest(BaseModel):
-    transport_type: str
-    origin: str
-    destination: str
-    departure_time: str
-    arrival_time: str
+    transport_type: Optional[str] = None
+    origin: Optional[str] = None
+    destination: Optional[str] = None
+    departure_time: Optional[str] = None
+    arrival_time: Optional[str] = None
     booking_reference: Optional[str] = None
     cost: Optional[float] = None
     is_departure: bool = False
@@ -32,25 +32,25 @@ class TravelCardCreateRequest(BaseModel):
 class HotelResponse(BaseModel):
     id: str
     travel_card_id: str
-    hotel_name: str
-    location: str
-    check_in_date: date
-    check_out_date: date
-    room_type: Optional[str]
-    price_per_night: Optional[float]
-    total_cost: Optional[float]
+    hotel_name: Optional[str] = None
+    location: Optional[str] = None
+    check_in_date: Optional[date] = None
+    check_out_date: Optional[date] = None
+    room_type: Optional[str] = None
+    price_per_night: Optional[float] = None
+    total_cost: Optional[float] = None
 
 class TransportResponse(BaseModel):
     id: str
     travel_card_id: str
-    transport_type: str
-    origin: str
-    destination: str
-    departure_time: str
-    arrival_time: str
-    booking_reference: Optional[str]
-    cost: Optional[float]
-    is_departure: bool
+    transport_type: Optional[str] = None
+    origin: Optional[str] = None
+    destination: Optional[str] = None
+    departure_time: Optional[str] = None
+    arrival_time: Optional[str] = None
+    booking_reference: Optional[str] = None
+    cost: Optional[float] = None
+    is_departure: bool = False
 
 class TravelCardResponse(BaseModel):
     id: str
