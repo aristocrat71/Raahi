@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './AddTaskModal.css';
 
 interface Hotel {
@@ -32,6 +32,7 @@ interface AddTaskModalProps {
     end_date: string;
     status: string;
     hotels: {
+      id?: string;
       hotel_name: string | null;
       location: string | null;
       check_in_date: string | null;
@@ -41,6 +42,7 @@ interface AddTaskModalProps {
       total_cost: number | null;
     }[];
     transports: {
+      id?: string;
       transport_type: string | null;
       origin: string | null;
       destination: string | null;
@@ -52,6 +54,34 @@ interface AddTaskModalProps {
   }) => Promise<void>;
   onStatusChange: (status: string) => void;
   defaultStatus: string;
+  isEditMode?: boolean;
+  cardData?: {
+    id: string;
+    destination: string;
+    start_date: string;
+    end_date: string;
+    status: string;
+    hotels?: Array<{
+      id: string;
+      hotel_name: string | null;
+      location: string | null;
+      check_in_date: string | null;
+      check_out_date: string | null;
+      room_type: string | null;
+      price_per_night: number | null;
+      total_cost: number | null;
+    }>;
+    transports?: Array<{
+      id: string;
+      transport_type: string | null;
+      origin: string | null;
+      destination: string | null;
+      departure_time: string | null;
+      arrival_time: string | null;
+      booking_reference: string | null;
+      cost: number | null;
+    }>;
+  };
 }
 
 type TabType = 'basic' | 'hotels' | 'transport';
@@ -62,6 +92,8 @@ export default function AddTaskModal({
   onAddTrip,
   onStatusChange,
   defaultStatus,
+  isEditMode = false,
+  cardData,
 }: AddTaskModalProps) {
   const [activeTab, setActiveTab] = useState<TabType>('basic');
   const [loading, setLoading] = useState(false);
@@ -193,6 +225,106 @@ export default function AddTaskModal({
 
   const errors = getErrors();
 
+  // Reset form when modal opens/closes or when cardData changes
+  useEffect(() => {
+    if (isOpen) {
+      if (isEditMode && cardData) {
+        // In edit mode - pre-fill with cardData
+        setDestination(cardData.destination);
+        setStartDate(cardData.start_date);
+        setEndDate(cardData.end_date);
+        setStatus(cardData.status);
+        
+        if (cardData.hotels && cardData.hotels.length > 0) {
+          setHotels(
+            cardData.hotels.map((h) => ({
+              id: h.id,
+              name: h.hotel_name || '',
+              location: h.location || '',
+              check_in_date: h.check_in_date || '',
+              check_out_date: h.check_out_date || '',
+              room_type: h.room_type || '',
+              price_per_night: h.price_per_night ? h.price_per_night.toString() : '',
+              total_cost: h.total_cost ? h.total_cost.toString() : '',
+            }))
+          );
+        } else {
+          setHotels([
+            {
+              id: '0',
+              name: '',
+              location: '',
+              check_in_date: '',
+              check_out_date: '',
+              room_type: '',
+              price_per_night: '',
+              total_cost: '',
+            },
+          ]);
+        }
+        
+        if (cardData.transports && cardData.transports.length > 0) {
+          setTransports(
+            cardData.transports.map((t) => ({
+              id: t.id,
+              type: t.transport_type || '',
+              origin: t.origin || '',
+              destination: t.destination || '',
+              departure_time: t.departure_time || '',
+              arrival_time: t.arrival_time || '',
+              booking_reference: t.booking_reference || '',
+              cost: t.cost ? t.cost.toString() : '',
+            }))
+          );
+        } else {
+          setTransports([
+            {
+              id: '0',
+              type: '',
+              origin: '',
+              destination: '',
+              departure_time: '',
+              arrival_time: '',
+              booking_reference: '',
+              cost: '',
+            },
+          ]);
+        }
+      } else {
+        // In create mode - reset form
+        setDestination('');
+        setStartDate('');
+        setEndDate('');
+        setStatus(defaultStatus);
+        setHotels([
+          {
+            id: '0',
+            name: '',
+            location: '',
+            check_in_date: '',
+            check_out_date: '',
+            room_type: '',
+            price_per_night: '',
+            total_cost: '',
+          },
+        ]);
+        setTransports([
+          {
+            id: '0',
+            type: '',
+            origin: '',
+            destination: '',
+            departure_time: '',
+            arrival_time: '',
+            booking_reference: '',
+            cost: '',
+          },
+        ]);
+      }
+      setActiveTab('basic');
+    }
+  }, [isOpen, isEditMode, cardData]);
+
   const handleNext = () => {
     if (activeTab === 'basic' && validateBasicInfo()) {
       setActiveTab('hotels');
@@ -237,6 +369,7 @@ export default function AddTaskModal({
           h.price_per_night.trim() ||
           h.total_cost.trim()
       ).map((h) => ({
+        ...(h.id && h.id !== '0' && { id: h.id }),
         hotel_name: h.name.trim() || null,
         location: h.location.trim() || null,
         check_in_date: h.check_in_date || null,
@@ -257,6 +390,7 @@ export default function AddTaskModal({
           t.booking_reference.trim() ||
           t.cost.trim()
       ).map((t) => ({
+        ...(t.id && t.id !== '0' && { id: t.id }),
         transport_type: t.type.trim() || null,
         origin: t.origin.trim() || null,
         destination: t.destination.trim() || null,
@@ -756,7 +890,7 @@ export default function AddTaskModal({
                   onClick={handleSubmit}
                   disabled={loading}
                 >
-                  {loading ? 'Submitting...' : 'Submit'}
+                  {loading ? (isEditMode ? 'Updating...' : 'Submitting...') : (isEditMode ? 'Update' : 'Submit')}
                 </button>
               </div>
             </>

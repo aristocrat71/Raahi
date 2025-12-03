@@ -10,6 +10,8 @@ interface TravelCardProps {
   status: string;
   onDelete: (id: string) => void;
   onCardClick?: (id: string) => void;
+  onEdit?: (id: string) => void;
+  onToast?: (message: string, type: 'success' | 'error') => void;
 }
 
 export default function TravelCard({
@@ -21,6 +23,8 @@ export default function TravelCard({
   status,
   onDelete,
   onCardClick,
+  onEdit,
+  onToast,
 }: TravelCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -53,7 +57,7 @@ export default function TravelCard({
 
   const handleEditClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // TODO: Implement edit functionality
+    onEdit?.(id);
   };
 
   const handleConfirmDelete = async () => {
@@ -71,10 +75,10 @@ export default function TravelCard({
       if (response.ok) {
         onDelete(id);
       } else if (response.status === 401) {
-        alert('Session expired. Please login again.');
+        onToast?.('Session expired. Please login again.', 'error');
         localStorage.removeItem('token');
       } else {
-        alert('Failed to delete trip. Please try again.');
+        onToast?.('Failed to delete trip. Please try again.', 'error');
       }
     } catch (error) {
       console.error('Error deleting trip:', error);
@@ -113,7 +117,7 @@ export default function TravelCard({
         </div>
 
         <div className="card-actions">
-          <button className="card-btn edit-btn" disabled onClick={handleEditClick}>Edit</button>
+          <button className="card-btn edit-btn" onClick={handleEditClick}>Edit</button>
           <button 
             className="card-btn remove-btn" 
             onClick={handleRemoveClick}

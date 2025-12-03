@@ -4,7 +4,33 @@ import Header from '../components/Header';
 import TravelCard from '../components/TravelCard';
 import AddTaskModal from '../components/AddTaskModal';
 import PreviewModal from '../components/PreviewModal';
+import Toast from '../components/Toast';
 import './Dashboard.css';
+
+interface Hotel {
+  id: string;
+  travel_card_id: string;
+  hotel_name: string | null;
+  location: string | null;
+  check_in_date: string | null;
+  check_out_date: string | null;
+  room_type: string | null;
+  price_per_night: number | null;
+  total_cost: number | null;
+}
+
+interface Transport {
+  id: string;
+  travel_card_id: string;
+  transport_type: string | null;
+  origin: string | null;
+  destination: string | null;
+  departure_time: string | null;
+  arrival_time: string | null;
+  booking_reference: string | null;
+  cost: number | null;
+  is_departure: boolean;
+}
 
 interface TravelCard {
   id: string;
@@ -13,6 +39,8 @@ interface TravelCard {
   end_date: string;
   duration_days: number;
   status: string;
+  hotels?: Hotel[];
+  transports?: Transport[];
 }
 
 export default function Dashboard() {
@@ -23,6 +51,9 @@ export default function Dashboard() {
   const [defaultStatus, setDefaultStatus] = useState('planning');
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewCard, setPreviewCard] = useState<TravelCard | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editCard, setEditCard] = useState<TravelCard | null>(null);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -96,6 +127,16 @@ export default function Dashboard() {
     }
   };
 
+  const handleEditClick = (cardId: string) => {
+    const card = travelCards.find((c) => c.id === cardId);
+    if (card) {
+      setEditCard(card);
+      setIsEditMode(true);
+      setIsModalOpen(true);
+      setPreviewOpen(false);
+    }
+  };
+
   const handleAddTrip = async (data: {
     destination: string;
     start_date: string;
@@ -123,7 +164,7 @@ export default function Dashboard() {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      alert('Session expired. Please login again.');
+      setToast({ message: 'Session expired. Please login again.', type: 'error' });
       navigate('/login');
       return;
     }
@@ -147,8 +188,15 @@ export default function Dashboard() {
         payload.transports = data.transports;
       }
 
-      const response = await fetch('http://localhost:8000/api/travel-cards', {
-        method: 'POST',
+      // Determine if create or update
+      const isUpdate = isEditMode && editCard;
+      const endpoint = isUpdate 
+        ? `http://localhost:8000/api/travel-cards/${editCard.id}`
+        : 'http://localhost:8000/api/travel-cards';
+      const method = isUpdate ? 'PUT' : 'POST';
+
+      const response = await fetch(endpoint, {
+        method,
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -157,18 +205,29 @@ export default function Dashboard() {
       });
 
       if (response.ok) {
-        const newCard = await response.json();
-        setTravelCards([...travelCards, newCard]);
-        alert('Trip created successfully!');
+        const result = await response.json();
+        if (isUpdate) {
+          // Update card in list
+          setTravelCards(
+            travelCards.map((card) => (card.id === editCard.id ? result : card))
+          );
+          setToast({ message: 'Trip updated successfully!', type: 'success' });
+          setIsEditMode(false);
+          setEditCard(null);
+        } else {
+          setTravelCards([...travelCards, result]);
+          setToast({ message: 'Trip created successfully!', type: 'success' });
+        }
+        setIsModalOpen(false);
       } else if (response.status === 401) {
         localStorage.removeItem('token');
         navigate('/login');
       } else {
         const error = await response.json();
-        throw new Error(error.detail || 'Failed to create trip');
+        throw new Error(error.detail || (isUpdate ? 'Failed to update trip' : 'Failed to create trip'));
       }
     } catch (error) {
-      console.error('Error creating trip:', error);
+      console.error(isEditMode ? 'Error updating trip:' : 'Error creating trip:', error);
       throw error;
     }
   };
@@ -212,6 +271,8 @@ export default function Dashboard() {
                     setTravelCards(travelCards.filter((c) => c.id !== id))
                   }
                   onCardClick={handleCardClick}
+                  onEdit={handleEditClick}
+                  onToast={(message, type) => setToast({ message, type })}
                 />
               ))}
             </div>
@@ -224,10 +285,16 @@ export default function Dashboard() {
 
         <AddTaskModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false);
+            setIsEditMode(false);
+            setEditCard(null);
+          }}
           onAddTrip={handleAddTrip}
           onStatusChange={setDefaultStatus}
           defaultStatus={defaultStatus}
+          isEditMode={isEditMode}
+          cardData={editCard || undefined}
         />
 
         <PreviewModal
@@ -235,6 +302,14 @@ export default function Dashboard() {
           onClose={() => setPreviewOpen(false)}
           cardData={previewCard || undefined}
         />
+
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )}
       </div>
     </>
   );
