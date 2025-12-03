@@ -92,7 +92,7 @@ export default function PreviewModal({
         <div className="preview-header">
           <h2 className="preview-title">{cardData.destination}</h2>
           <button className="preview-close-btn" onClick={onClose}>
-            ✕
+            Close
           </button>
         </div>
 
@@ -295,13 +295,6 @@ export default function PreviewModal({
               ))}
             </div>
           )}
-        </div>
-
-        {/* Footer */}
-        <div className="preview-footer">
-          <button className="btn-close" onClick={onClose}>
-            Close
-          </button>
         </div>
       </div>
     </div>

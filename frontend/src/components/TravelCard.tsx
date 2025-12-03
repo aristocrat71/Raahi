@@ -46,8 +46,14 @@ export default function TravelCard({
     });
   };
 
-  const handleRemoveClick = () => {
+  const handleRemoveClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setShowDeleteConfirm(true);
+  };
+
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    // TODO: Implement edit functionality
   };
 
   const handleConfirmDelete = async () => {
@@ -107,7 +113,7 @@ export default function TravelCard({
         </div>
 
         <div className="card-actions">
-          <button className="card-btn edit-btn" disabled>Edit</button>
+          <button className="card-btn edit-btn" disabled onClick={handleEditClick}>Edit</button>
           <button 
             className="card-btn remove-btn" 
             onClick={handleRemoveClick}
