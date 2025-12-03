@@ -9,6 +9,7 @@ interface TravelCardProps {
   duration_days: number;
   status: string;
   onDelete: (id: string) => void;
+  onCardClick?: (id: string) => void;
 }
 
 export default function TravelCard({
@@ -19,6 +20,7 @@ export default function TravelCard({
   duration_days,
   status,
   onDelete,
+  onCardClick,
 }: TravelCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -83,7 +85,7 @@ export default function TravelCard({
 
   return (
     <>
-      <div className="travel-card">
+      <div className="travel-card" onClick={() => onCardClick?.(id)}>
         <div className="card-header">
           <h3 className="card-destination">{destination}</h3>
           <span className={`status-badge ${getStatusColor(status)}`}>

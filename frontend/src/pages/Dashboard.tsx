@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import TravelCard from '../components/TravelCard';
 import AddTaskModal from '../components/AddTaskModal';
+import PreviewModal from '../components/PreviewModal';
 import './Dashboard.css';
 
 interface TravelCard {
@@ -20,6 +21,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [defaultStatus, setDefaultStatus] = useState('planning');
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewCard, setPreviewCard] = useState<TravelCard | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -82,6 +85,14 @@ export default function Dashboard() {
       localStorage.removeItem('email');
       localStorage.removeItem('full_name');
       navigate('/login');
+    }
+  };
+
+  const handleCardClick = (cardId: string) => {
+    const card = travelCards.find((c) => c.id === cardId);
+    if (card) {
+      setPreviewCard(card);
+      setPreviewOpen(true);
     }
   };
 
@@ -200,6 +211,7 @@ export default function Dashboard() {
                   onDelete={(id) =>
                     setTravelCards(travelCards.filter((c) => c.id !== id))
                   }
+                  onCardClick={handleCardClick}
                 />
               ))}
             </div>
@@ -216,6 +228,12 @@ export default function Dashboard() {
           onAddTrip={handleAddTrip}
           onStatusChange={setDefaultStatus}
           defaultStatus={defaultStatus}
+        />
+
+        <PreviewModal
+          isOpen={previewOpen}
+          onClose={() => setPreviewOpen(false)}
+          cardData={previewCard || undefined}
         />
       </div>
     </>
