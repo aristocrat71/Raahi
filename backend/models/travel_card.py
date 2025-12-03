@@ -25,6 +25,7 @@ class TravelCardCreateRequest(BaseModel):
     destination: str
     start_date: date
     end_date: date
+    status: str
     hotels: Optional[List[HotelRequest]] = None
     transports: Optional[List[TransportRequest]] = None
 

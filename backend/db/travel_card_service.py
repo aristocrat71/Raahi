@@ -5,7 +5,7 @@ def calculate_duration(start_date: date, end_date: date) -> int:
     delta = end_date - start_date
     return delta.days + 1
 
-def create_travel_card_with_nested(user_id: str, destination: str, start_date: date, end_date: date, hotels: list = None, transports: list = None):
+def create_travel_card_with_nested(user_id: str, destination: str, start_date: date, end_date: date, status: str = "planning", hotels: list = None, transports: list = None):
     duration_days = calculate_duration(start_date, end_date)
     
     try:
@@ -16,7 +16,7 @@ def create_travel_card_with_nested(user_id: str, destination: str, start_date: d
             "start_date": start_date.isoformat(),
             "end_date": end_date.isoformat(),
             "duration_days": duration_days,
-            "status": "planning"
+            "status": status
         }).execute()
         
         if not card_response.data:

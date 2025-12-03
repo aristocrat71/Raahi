@@ -42,6 +42,7 @@ def create_travel_card(
         request.destination,
         request.start_date,
         request.end_date,
+        request.status,
         hotels,
         transports
     )
