@@ -157,6 +157,126 @@
   transform: translateY(0);
 }
 
+.delete-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.delete-confirm-modal {
+  background-color: var(--white);
+  border: var(--border-width) solid var(--dark-blue);
+  border-radius: 8px;
+  padding: 32px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 10px 40px rgba(0, 64, 128, 0.3);
+  animation: slideUp 0.3s ease-in-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.delete-confirm-modal h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--dark-blue);
+  margin: 0 0 16px 0;
+}
+
+.delete-confirm-modal p {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 24px 0;
+  line-height: 1.6;
+}
+
+.delete-confirm-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.btn-cancel {
+  padding: 10px 20px;
+  background-color: var(--white);
+  color: var(--dark-blue);
+  border: var(--border-width) solid var(--dark-blue);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.btn-cancel:hover:not(:disabled) {
+  background-color: #f5f5f5;
+  box-shadow: 0 2px 8px rgba(0, 64, 128, 0.1);
+  transform: translateY(-1px);
+}
+
+.btn-cancel:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-confirm-delete {
+  padding: 10px 20px;
+  background-color: #ff6b6b;
+  color: var(--white);
+  border: var(--border-width) solid #ff6b6b;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.btn-confirm-delete:hover:not(:disabled) {
+  background-color: #ff5252;
+  border-color: #ff5252;
+  box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-confirm-delete:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-confirm-delete:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .travel-card {
     padding: 16px;

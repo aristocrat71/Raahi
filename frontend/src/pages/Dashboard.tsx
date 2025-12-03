@@ -217,6 +217,9 @@ export default function Dashboard() {
                   end_date={card.end_date}
                   duration_days={card.duration_days}
                   status={card.status}
+                  onDelete={(id) =>
+                    setTravelCards(travelCards.filter((c) => c.id !== id))
+                  }
                 />
               ))}
             </div>
